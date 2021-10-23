@@ -26,9 +26,11 @@ import {
 const Main = styled.main`
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center; 
-  background: url(${bg})
+  background: url(${bg});
+  font-family: 'abhayalibre';
 `;
 
 const ConnectButton = styled(WalletDialogButton)`
@@ -37,7 +39,7 @@ const ConnectButton = styled(WalletDialogButton)`
   font-size: 28px !important;
   padding: 0 !important;
   box-shadow: none !important; 
-  margin-top: 15px !important;
+  margin-top: 20px !important;
   width: 100%;
   justify-content: center !important;
   position: relative;
@@ -63,8 +65,9 @@ const CustomButton = styled.div`
   height: 445px;
   border-radius: 15px;
   border: 3px solid #fff ;
-  text-align: center; 
-  
+  text-align: center;  
+  margin-bottom: 20px;
+  margin-top: 18px;
 
   &:hover {
     background: inherit;
@@ -81,12 +84,27 @@ const ButtonImage = styled.span`
   border-top-right-radius: 10px;
 `;
 
+const P = styled.p`
+  margin: 0;
+  
+`
+
 
 const CounterText = styled.span``; // add your styles here
 
 const MintContainer = styled.div``; // add your styles here
 
-const MintButton = styled(Button)``; // add your styles here
+const MintButton = styled(Button)`
+  background: inherit !important;
+  font-family: 'ancient'!important;
+  font-size: 28px !important;
+  padding: 0 !important;
+  box-shadow: none !important; 
+  margin-top: 15px !important;
+  width: 100%;
+  justify-content: center !important;
+  position: relative;
+`; // add your styles here
 
 export interface HomeProps {
   candyMachineId: anchor.web3.PublicKey;
@@ -115,7 +133,7 @@ const Home = (props: HomeProps) => {
 
   const [startDate, setStartDate] = useState(new Date(props.startDate));
 
-  const wallet =  useAnchorWallet();
+  const wallet = useAnchorWallet();
   const [candyMachine, setCandyMachine] = useState<CandyMachine>();
 
   const refreshCandyMachineState = () => {
@@ -228,17 +246,7 @@ const Home = (props: HomeProps) => {
 
   return (
     <Main>
-      {wallet && (
-        <p>Wallet {shortenAddress(wallet.publicKey.toBase58() || "")}</p>
-      )}
-
-      {wallet && <p>Balance: {(balance || 0).toLocaleString()} SOL</p>}
-
-      {wallet && <p>Total Available: {itemsAvailable}</p>}
-
-      {wallet && <p>Redeemed: {itemsRedeemed}</p>}
-
-      {wallet && <p>Remaining: {itemsRemaining}</p>}
+      <P>{wallet && itemsAvailable+'/'+itemsRemaining}</P>
 
       <MintContainer>
         {!wallet ? (
@@ -249,30 +257,39 @@ const Home = (props: HomeProps) => {
             </ConnectButton>
           </CustomButton>
         ) : (
-          <MintButton
-            disabled={isSoldOut || isMinting || !isActive}
-            onClick={onMint}
-            variant="contained"
-          >
-            {isSoldOut ? (
-              "SOLD OUT"
-            ) : isActive ? (
-              isMinting ? (
-                <CircularProgress />
+          <CustomButton>
+            <ButtonImage/>
+            <MintButton
+              disabled={isSoldOut || isMinting || !isActive}
+              onClick={onMint}
+              variant="contained"
+            >
+              {isSoldOut ? (
+                "SOLD OUT"
+              ) : isActive ? (
+                isMinting ? (
+                  <CircularProgress />
+                ) : (
+                  "MINT"
+                )
               ) : (
-                "MINT"
-              )
-            ) : (
-              <Countdown
-                date={startDate}
-                onMount={({ completed }) => completed && setIsActive(true)}
-                onComplete={() => setIsActive(true)}
-                renderer={renderCounter}
-              />
-            )}
-          </MintButton>
+                <Countdown
+                  date={startDate}
+                  onMount={({ completed }) => completed && setIsActive(true)}
+                  onComplete={() => setIsActive(true)}
+                  renderer={renderCounter}
+                />
+              )}
+            </MintButton>
+          </CustomButton>
         )}
       </MintContainer>
+
+      {wallet && (
+        <P>Your Address {shortenAddress(wallet.publicKey.toBase58() || "")}</P>
+      )}
+
+      {wallet && <P style={{marginTop: '8px'}}>Your Balance: {(balance || 0).toLocaleString()} SOL</P>}
 
       <Snackbar
         open={alertState.open}

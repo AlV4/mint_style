@@ -6,7 +6,11 @@
     font-style: normal;
 }
 
-#ConnectButton .MuiButton-label {
-    /* height: 445px; */
+@font-face {
+    font-family: 'abhayalibre';
+    src: url('abhayalibre.woff2') format('woff2'),
+         url('abhayalibre.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
