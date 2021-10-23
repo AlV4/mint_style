@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'ancient';
+    src: url('ancient.woff2') format('woff2'),
+         url('ancient.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#ConnectButton .MuiButton-label {
+    /* height: 445px; */
+}
+
